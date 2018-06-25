@@ -17,6 +17,9 @@ import java.util.Optional;
 @Service("employeeManagerServiceImpl")
 public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeManagerServiceImpl.class);
+
+
     private final EmployeeValidationServiceImpl validationService;
     private final IEmployeeRepository employeeRepository;
 
@@ -26,16 +29,17 @@ public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
         this.employeeRepository = employeeRepo;
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeManagerServiceImpl.class);
-
 
     @Override
     public Employee add(final Employee employee) throws InvalidEmployeeRequestException {
 
 
+        LOGGER.info("Adding Employee {}", employee);
         validationService.validateEmployee(employee);
 
         final Employee employeeAdded = employeeRepository.save(employee);
+
+        LOGGER.info("Employee was added succesfully {} ", employee);
 
         return employeeAdded;
 
@@ -45,21 +49,54 @@ public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
     @Override
     public Employee update(final Long id, final Employee employee) throws InvalidEmployeeRequestException, EmployeeDoNotExistException {
 
-
+        LOGGER.info("Updating Employee {} with id {}", employee, id);
         validationService.validateEmployee(employee);
 
         final Optional<Employee> existingEmployee = employeeRepository.findById(id);
 
         if (existingEmployee.isPresent()) {
-
+            LOGGER.info("Employee exists");
             employee.setId(id);
-            final Employee save = employeeRepository.save(employee);
-            return save;
+            final Employee savedEmployee = employeeRepository.save(employee);
+
+            LOGGER.info("Employee was successfully updated {}", savedEmployee);
+            return savedEmployee;
 
         } else {
+            LOGGER.error("Employee with ID {} do not exists", id);
             throw new EmployeeDoNotExistException("Employee with Id:" + id + " do not exist in the database.");
         }
 
 
+    }
+
+    @Override
+    public boolean delete(final Long id) throws EmployeeDoNotExistException {
+
+        LOGGER.info("deleting Employee with id {}", id);
+
+        final Optional<Employee> existingEmployee = employeeRepository.findById(id);
+
+        if (existingEmployee.isPresent()) {
+
+            employeeRepository.delete(existingEmployee.get());
+            return true;
+        } else {
+            LOGGER.error("Employee with ID {} do not exists", id);
+            throw new EmployeeDoNotExistException("Employee with Id:" + id + " do not exist in the database.");
+        }
+
+
+    }
+
+    @Override
+    public Optional<Employee> find(final Long id) {
+
+        LOGGER.info("Finding Employee with the id {}", id);
+        final Optional<Employee> employeeWithId = employeeRepository.findById(id);
+
+        employeeWithId.ifPresent(e -> LOGGER.info("employee found {} ", e));
+
+        return employeeWithId;
     }
 }

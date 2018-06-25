@@ -5,13 +5,6 @@ package com.demo.crud.poc.exception;
  */
 public class InvalidEmployeeRequestException extends Exception {
 
-    public InvalidEmployeeRequestException() {
-        super();
-    }
-
-    public InvalidEmployeeRequestException(String message) {
-        super(message);
-    }
 
     public InvalidEmployeeRequestException(String message, Throwable cause) {
         super(message, cause);

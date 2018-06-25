@@ -5,15 +5,9 @@ package com.demo.crud.poc.exception;
  */
 public class EmployeeDoNotExistException extends Exception {
 
-    public EmployeeDoNotExistException() {
-        super();
-    }
 
     public EmployeeDoNotExistException(String message) {
         super(message);
     }
 
-    public EmployeeDoNotExistException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
