@@ -4,16 +4,16 @@ import com.demo.crud.poc.exception.EmployeeAlreadyExistsException;
 import com.demo.crud.poc.exception.EmployeeDoNotExistException;
 import com.demo.crud.poc.exception.InvalidEmployeeRequestException;
 import com.demo.crud.poc.model.Employee;
+import com.demo.crud.poc.repository.IEmployeeRepository;
 import com.demo.crud.poc.services.IEmployeeManagerService;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
@@ -23,18 +23,21 @@ import java.util.Optional;
  * Created by muhdk on 25/06/2018.
  */
 @RunWith(SpringRunner.class)
-@Profile("TEST")
+@ActiveProfiles("TEST")
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class EmployeeManagerServiceImplTest {
 
     private static final Employee DUMMY_EMPLOYEE = new PodamFactoryImpl().manufacturePojo(Employee.class);
     @Autowired
     private IEmployeeManagerService employeeManagerService;
 
-    @Before
+    @Autowired
+    private IEmployeeRepository employeeRepository;
+
+    @After
     public void init() {
 
+        employeeRepository.deleteAll();
     }
 
     @Test(expected = InvalidEmployeeRequestException.class)

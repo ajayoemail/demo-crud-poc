@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -43,9 +44,23 @@ public class EmployeeController {
         return new ResponseEntity(employees, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "Get employee by id", response = Employee.class)
+    public ResponseEntity employeeById(@PathVariable("id") final Long id) throws EmployeeDoNotExistException {
+        final Optional<Employee> employee = employeeManagerService.find(id);
+
+        if (employee.isPresent()) {
+            return new ResponseEntity(employee, HttpStatus.OK);
+
+        }
+
+
+        throw new EmployeeDoNotExistException("Employee with id " + id + " do not exist");
+    }
+
     @RequestMapping(value = "/employees/{id}", method = RequestMethod.PUT)
     @ApiOperation(value = "Update Existing employee", response = Employee.class)
-    public ResponseEntity update(@PathVariable("id") final Long employeeId, @RequestBody Employee employee) throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException, EmployeeDoNotExistException {
+    public ResponseEntity update(@PathVariable("id") final Long employeeId, @RequestBody Employee employee) throws EmployeeDoNotExistException, InvalidEmployeeRequestException {
         final Employee employeeSaved = employeeManagerService.update(employeeId, employee);
 
         return new ResponseEntity(employeeSaved, HttpStatus.OK);
@@ -53,7 +68,7 @@ public class EmployeeController {
 
     @RequestMapping(value = "/employees/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "Delete Existing employee", response = Employee.class)
-    public ResponseEntity delete(@PathVariable("id") final Long employeeId) throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException, EmployeeDoNotExistException {
+    public ResponseEntity delete(@PathVariable("id") final Long employeeId) throws EmployeeDoNotExistException {
         employeeManagerService.delete(employeeId);
 
         return new ResponseEntity("Employee deleted", HttpStatus.OK);

@@ -77,6 +77,13 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>3.1.0</version>
+			<scope>test</scope>
+		</dependency>
 
 
 
@@ -125,6 +132,10 @@
 					<systemPropertyVariables>
 						<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
 					</systemPropertyVariables>
+					<excludes>
+						<exclude>**/*Application.*</exclude>
+						<exclude>**/com/demo/crud/poc/model/*.*</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
