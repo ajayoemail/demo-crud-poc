@@ -26,6 +26,8 @@ This repository is a sample CRUD for assignment purposes.
    - Jacoco to get coverage
    - Overall coverage > 99%
    
+   [![coverage.png](https://s33.postimg.cc/5um1mu127/coverage.png)](https://postimg.cc/image/mv4xvie3f/)
+   
  
  ## How to check out and run
  
@@ -37,6 +39,8 @@ This repository is a sample CRUD for assignment purposes.
  ## H2 console
   - When the SpringBoot starts up you can access H2 console
   - Use JDBC URL : jdbc:h2:mem:demo_employee_db
+  
+  [![H2_Console.png](https://s33.postimg.cc/hjq1avcm7/H2_Console.png)](https://postimg.cc/image/y7hjdd7dn/)
   
  ## Swagger UI
   - Swagger UI is enabled and can be accessed http://localhost:9090/swagger-ui.html
