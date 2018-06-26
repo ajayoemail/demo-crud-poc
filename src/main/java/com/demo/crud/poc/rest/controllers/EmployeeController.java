@@ -23,7 +23,7 @@ public class EmployeeController {
     private IEmployeeManagerService employeeManagerService;
 
     @Autowired
-    public void setProductService(IEmployeeManagerService employeeManagerService) {
+    public void setEmployeeManagerService(IEmployeeManagerService employeeManagerService) {
         this.employeeManagerService = employeeManagerService;
     }
 
