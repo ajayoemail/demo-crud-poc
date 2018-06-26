@@ -33,6 +33,13 @@ public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
     }
 
 
+    /**
+     * add a new employe
+     * @param employee
+     * @return
+     * @throws InvalidEmployeeRequestException if any of the mandatory fields are missing
+     * @throws EmployeeAlreadyExistsException  if employee exists with same name
+     */
     @Override
     public Employee add(final Employee employee) throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException {
 
