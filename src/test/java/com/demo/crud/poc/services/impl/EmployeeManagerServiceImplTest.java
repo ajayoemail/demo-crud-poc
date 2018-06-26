@@ -1,16 +1,19 @@
 package com.demo.crud.poc.services.impl;
 
+import com.demo.crud.poc.exception.EmployeeAlreadyExistsException;
 import com.demo.crud.poc.exception.EmployeeDoNotExistException;
 import com.demo.crud.poc.exception.InvalidEmployeeRequestException;
 import com.demo.crud.poc.model.Employee;
 import com.demo.crud.poc.services.IEmployeeManagerService;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
@@ -22,20 +25,26 @@ import java.util.Optional;
 @RunWith(SpringRunner.class)
 @Profile("TEST")
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class EmployeeManagerServiceImplTest {
 
     private static final Employee DUMMY_EMPLOYEE = new PodamFactoryImpl().manufacturePojo(Employee.class);
     @Autowired
     private IEmployeeManagerService employeeManagerService;
 
+    @Before
+    public void init() {
+
+    }
+
     @Test(expected = InvalidEmployeeRequestException.class)
-    public void test_employee_null_object() throws InvalidEmployeeRequestException {
+    public void test_employee_null_object() throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException {
         employeeManagerService.add(null);
 
     }
 
     @Test(expected = InvalidEmployeeRequestException.class)
-    public void test_employee_name_null() throws InvalidEmployeeRequestException {
+    public void test_employee_name_null() throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException {
         employeeManagerService.add(new Employee());
 
     }
@@ -43,7 +52,7 @@ public class EmployeeManagerServiceImplTest {
     //add employee then fetch the employee
     //validate the employee
     @Test
-    public void test_add_employee_get_employee() {
+    public void test_add_employee_get_employee() throws EmployeeAlreadyExistsException {
 
 
         try {
@@ -53,6 +62,22 @@ public class EmployeeManagerServiceImplTest {
             Assert.assertThat(employee.getName(), Matchers.equalTo(DUMMY_EMPLOYEE.getName()));
             Assert.assertThat(employee.getAddress(), Matchers.equalTo(DUMMY_EMPLOYEE.getAddress()));
             Assert.assertThat(employee.getDateJoined(), Matchers.equalTo(DUMMY_EMPLOYEE.getDateJoined()));
+
+        } catch (InvalidEmployeeRequestException e) {
+            Assert.fail("Exception should not be thrown");
+        }
+    }
+
+    //add same employee twice
+    //
+    @Test(expected = EmployeeAlreadyExistsException.class)
+    public void test_add_duplicate_employee() throws EmployeeAlreadyExistsException {
+
+
+        try {
+            employeeManagerService.add(DUMMY_EMPLOYEE);
+            employeeManagerService.add(DUMMY_EMPLOYEE);
+
 
         } catch (InvalidEmployeeRequestException e) {
             Assert.fail("Exception should not be thrown");

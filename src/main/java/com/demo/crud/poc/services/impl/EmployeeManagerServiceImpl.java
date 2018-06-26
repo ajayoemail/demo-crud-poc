@@ -1,14 +1,17 @@
 package com.demo.crud.poc.services.impl;
 
+import com.demo.crud.poc.exception.EmployeeAlreadyExistsException;
 import com.demo.crud.poc.exception.EmployeeDoNotExistException;
 import com.demo.crud.poc.exception.InvalidEmployeeRequestException;
 import com.demo.crud.poc.model.Employee;
 import com.demo.crud.poc.repository.IEmployeeRepository;
 import com.demo.crud.poc.services.IEmployeeManagerService;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,12 +34,20 @@ public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
 
 
     @Override
-    public Employee add(final Employee employee) throws InvalidEmployeeRequestException {
+    public Employee add(final Employee employee) throws InvalidEmployeeRequestException, EmployeeAlreadyExistsException {
 
 
         LOGGER.info("Adding Employee {}", employee);
         validationService.validateEmployee(employee);
 
+        LOGGER.info("Checking if employee exists with same name");
+
+        final Optional<Employee> existingEmployee = employeeRepository.findByName(employee.getName());
+
+        if (existingEmployee.isPresent()) {
+
+            throw new EmployeeAlreadyExistsException("Employee with the name already in the database");
+        }
         final Employee employeeAdded = employeeRepository.save(employee);
 
         LOGGER.info("Employee was added succesfully {} ", employee);
@@ -98,5 +109,11 @@ public class EmployeeManagerServiceImpl implements IEmployeeManagerService {
         employeeWithId.ifPresent(e -> LOGGER.info("employee found {} ", e));
 
         return employeeWithId;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+
+        return Lists.newArrayList(employeeRepository.findAll());
     }
 }
