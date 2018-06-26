@@ -24,6 +24,7 @@ This repository is a sample CRUD for assignment purposes.
    
  ## Testing Coverage
    - Jacoco to get coverage
+   - Code coverage can be seen by opening file target/site/jacoco/index.html
    - Overall coverage > 99%
    
    [![coverage.png](https://s33.postimg.cc/5um1mu127/coverage.png)](https://postimg.cc/image/mv4xvie3f/)
