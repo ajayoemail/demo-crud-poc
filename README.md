@@ -34,6 +34,7 @@ This repository is a sample CRUD for assignment purposes.
   - git clone https://github.com/ajayoemail/demo-crud-poc.git
   - mvn clean install (This will run all the tests)
   - mvn spring-boot:run (This will start up the springBoot)
+  - It can be run after building it (java -jar target/poc-0.0.1-SNAPSHOT.jar)
   - access via http://localhost:9090/
   
  ## H2 console
