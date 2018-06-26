@@ -11,6 +11,8 @@ This repository is a sample CRUD for assignment purposes.
    - Swagger API for api defination
    - Swagger UI to test API in browser
    
+   [![swagger.png](https://s33.postimg.cc/w088shvtr/swagger.png)](https://postimg.cc/image/d7wdowzff/)  
+   
  ## API
    - All the API Docs are available here http://localhost:9090/v2/api-docs  
    
